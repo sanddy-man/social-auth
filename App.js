@@ -19,13 +19,21 @@ import {
   Platform,
   Dimensions,
   KeyboardAvoidingView,
+  NativeModules,
+  LayoutAnimation,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
+const {UIManager} = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
 const App = () => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [useEmailPassword, setUseEmailPassword] = React.useState(false);
 
   const signInWithEmailAndPassword = () => {};
 
@@ -35,73 +43,98 @@ const App = () => {
 
   const signInWithApple = () => {};
 
+  const toggleEmailPasswordLogin = () => {
+    LayoutAnimation.spring();
+    setUseEmailPassword(!useEmailPassword);
+  };
+
   const isAndroid = Platform.OS === 'android';
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <View style={styles.body}>
-          <View style={styles.container}>
-            <TouchableOpacity
-              style={styles.googleButtonContainer}
-              onPress={signInWithGoogle}>
-              <Image
-                style={styles.loginIcon}
-                source={require('./assets/g-logo.png')}
-              />
-              <Text style={styles.googleText}>Sign in with Google</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.fbButtonContainer}
-              onPress={signInWithFB}>
-              <Image
-                style={styles.loginIcon}
-                source={require('./assets/f-logo.png')}
-              />
-              <Text style={styles.fbText}>Continue with Facebook</Text>
-            </TouchableOpacity>
-            {!isAndroid && (
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}>
+        <SafeAreaView>
+          <View style={styles.body}>
+            <View style={styles.container}>
               <TouchableOpacity
-                style={styles.appleButtonContainer}
-                onPress={signInWithApple}>
+                style={styles.googleButtonContainer}
+                onPress={signInWithGoogle}>
                 <Image
-                  style={styles.appleIcon}
-                  source={require('./assets/a-logo.png')}
+                  style={styles.loginIcon}
+                  source={require('./assets/g-logo.png')}
                 />
-                <Text style={styles.appleText}>Sign in with Google</Text>
+                <Text style={styles.googleText}>Sign in with Google</Text>
               </TouchableOpacity>
-            )}
+              <TouchableOpacity
+                style={styles.fbButtonContainer}
+                onPress={signInWithFB}>
+                <Image
+                  style={styles.loginIcon}
+                  source={require('./assets/f-logo.png')}
+                />
+                <Text style={styles.fbText}>Continue with Facebook</Text>
+              </TouchableOpacity>
+              {!isAndroid && (
+                <TouchableOpacity
+                  style={styles.appleButtonContainer}
+                  onPress={signInWithApple}>
+                  <Image
+                    style={styles.appleIcon}
+                    source={require('./assets/a-logo.png')}
+                  />
+                  <Text style={styles.appleText}>Sign in with Google</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            <View style={styles.footer}>
+              {useEmailPassword ? (
+                <>
+                  <TouchableOpacity>
+                    <Text
+                      style={styles.orText}
+                      onPress={toggleEmailPasswordLogin}>
+                      X
+                    </Text>
+                  </TouchableOpacity>
+                  <TextInput
+                    style={styles.inputContainer}
+                    placeholder="email"
+                    autoCapitalize="none"
+                    value={email}
+                    onChangeText={setEmail}
+                  />
+                  <TextInput
+                    style={styles.inputContainer}
+                    placeholder="password"
+                    autoCapitalize="none"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={true}
+                  />
+                  <TouchableOpacity
+                    style={styles.googleButtonContainer}
+                    onPress={signInWithEmailAndPassword}>
+                    <Text style={styles.emailText}>
+                      Sign in with email and password
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.orText}>Or</Text>
+                  <TouchableOpacity onPress={toggleEmailPasswordLogin}>
+                    <Text style={styles.emailOptionText}>
+                      Click here to use email and password
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+            </View>
           </View>
-          <View style={styles.footer}>
-            <Text style={styles.orText}>Or</Text>
-            <TextInput
-              style={styles.inputContainer}
-              placeholder="email"
-              autoCapitalize="none"
-              value={email}
-              onChangeText={setEmail}
-            />
-            <TextInput
-              style={styles.inputContainer}
-              placeholder="password"
-              autoCapitalize="none"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={true}
-            />
-            <TouchableOpacity
-              style={styles.googleButtonContainer}
-              onPress={signInWithEmailAndPassword}>
-              <Text style={styles.emailText}>
-                Sign in with email and password
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   );
@@ -120,6 +153,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: Platform.OS === 'android' ? 0 : 40,
   },
   googleButtonContainer: {
     minWidth: '80%',
@@ -222,6 +256,13 @@ const styles = StyleSheet.create({
   orText: {
     fontSize: 16,
     marginVertical: 20,
+  },
+  emailOptionText: {
+    fontSize: 16,
+    marginVertical: 20,
+    fontWeight: '600',
+    color: 'blue',
+    width: '80%',
   },
   footer: {
     flex: 1,
