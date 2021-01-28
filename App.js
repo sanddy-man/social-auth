@@ -10,63 +10,94 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Platform,
+  Dimensions,
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
+const App = () => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const signInWithEmailAndPassword = () => {};
+
+  const signInWithGoogle = () => {};
+
+  const signInWithFB = () => {};
+
+  const signInWithApple = () => {};
+
+  const isAndroid = Platform.OS === 'android';
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.body}>
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.googleButtonContainer}
+              onPress={signInWithGoogle}>
+              <Image
+                style={styles.loginIcon}
+                source={require('./assets/g-logo.png')}
+              />
+              <Text style={styles.googleText}>Sign in with Google</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.fbButtonContainer}
+              onPress={signInWithFB}>
+              <Image
+                style={styles.loginIcon}
+                source={require('./assets/f-logo.png')}
+              />
+              <Text style={styles.fbText}>Continue with Facebook</Text>
+            </TouchableOpacity>
+            {!isAndroid && (
+              <TouchableOpacity
+                style={styles.appleButtonContainer}
+                onPress={signInWithApple}>
+                <Image
+                  style={styles.appleIcon}
+                  source={require('./assets/a-logo.png')}
+                />
+                <Text style={styles.appleText}>Sign in with Google</Text>
+              </TouchableOpacity>
+            )}
           </View>
-        </ScrollView>
+          <View style={styles.footer}>
+            <Text style={styles.orText}>Or</Text>
+            <TextInput
+              style={styles.inputContainer}
+              placeholder="email"
+              autoCapitalize="none"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <TextInput
+              style={styles.inputContainer}
+              placeholder="password"
+              autoCapitalize="none"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry={true}
+            />
+            <TouchableOpacity
+              style={styles.googleButtonContainer}
+              onPress={signInWithEmailAndPassword}>
+              <Text style={styles.emailText}>
+                Sign in with email and password
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </SafeAreaView>
     </>
   );
@@ -74,40 +105,135 @@ const App: () => React$Node = () => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: Colors.lighter,
+    padding: 20,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   body: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  googleButtonContainer: {
+    minWidth: '80%',
+    minHeight: 40,
     backgroundColor: Colors.white,
+    textAlign: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 6.27,
+    elevation: 10,
+    overflow: 'visible',
+    padding: 8,
+    height: 40,
+    marginBottom: 10,
+    marginTop: 40,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  fbButtonContainer: {
+    minWidth: '80%',
+    minHeight: 40,
+    backgroundColor: '#1877f2',
+    textAlign: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 6.27,
+    elevation: 10,
+    overflow: 'visible',
+    padding: 8,
+    height: 40,
+    marginVertical: 10,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  appleButtonContainer: {
+    minWidth: '80%',
+    minHeight: 40,
+    backgroundColor: Colors.black,
+    textAlign: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 6.27,
+    elevation: 10,
+    overflow: 'visible',
+    padding: 8,
+    height: 40,
+    marginVertical: 10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  googleText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 24,
+    color: 'rgba(0,0,0,0.54)',
   },
-  highlight: {
-    fontWeight: '700',
+  fbText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginLeft: 14,
+    color: Colors.white,
+  },
+  appleText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: Colors.white,
+  },
+  emailText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'rgba(0,0,0,0.54)',
+  },
+  loginIcon: {
+    width: 18,
+    height: 18,
+  },
+  appleIcon: {
+    width: 44,
+    height: 44,
+    marginRight: 16,
+  },
+  orText: {
+    fontSize: 16,
+    marginVertical: 20,
   },
   footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.54)',
+    width: Dimensions.get('window').width * 0.8,
+    height: 44,
+    borderRadius: 8,
+    padding: 8,
+    fontSize: 14,
+    marginVertical: 10,
   },
 });
 
