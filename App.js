@@ -77,7 +77,7 @@ const App = () => {
                 />
                 <Text style={styles.fbText}>Continue with Facebook</Text>
               </TouchableOpacity>
-              {isAndroid && (
+              {!isAndroid && (
                 <TouchableOpacity
                   style={styles.appleButtonContainer}
                   onPress={signInWithApple}>
@@ -92,12 +92,10 @@ const App = () => {
             <View style={styles.footer}>
               {useEmailPassword ? (
                 <>
-                  <TouchableOpacity style={styles.closeButtonContainer}>
-                    <Text
-                      style={styles.orText}
-                      onPress={toggleEmailPasswordLogin}>
-                      X
-                    </Text>
+                  <TouchableOpacity
+                    style={styles.closeButtonContainer}
+                    onPress={toggleEmailPasswordLogin}>
+                    <Text style={styles.emailText}>X</Text>
                   </TouchableOpacity>
                   <TextInput
                     style={styles.inputContainer}
@@ -240,7 +238,6 @@ const styles = StyleSheet.create({
     shadowRadius: 6.27,
     elevation: 10,
     overflow: 'visible',
-    padding: 8,
     marginVertical: 10,
   },
   emailButtonContainer: {
