@@ -77,7 +77,7 @@ const App = () => {
                 />
                 <Text style={styles.fbText}>Continue with Facebook</Text>
               </TouchableOpacity>
-              {!isAndroid && (
+              {isAndroid && (
                 <TouchableOpacity
                   style={styles.appleButtonContainer}
                   onPress={signInWithApple}>
@@ -85,14 +85,14 @@ const App = () => {
                     style={styles.appleIcon}
                     source={require('./assets/a-logo.png')}
                   />
-                  <Text style={styles.appleText}>Sign in with Google</Text>
+                  <Text style={styles.appleText}>Sign in with Apple</Text>
                 </TouchableOpacity>
               )}
             </View>
             <View style={styles.footer}>
               {useEmailPassword ? (
                 <>
-                  <TouchableOpacity>
+                  <TouchableOpacity style={styles.closeButtonContainer}>
                     <Text
                       style={styles.orText}
                       onPress={toggleEmailPasswordLogin}>
@@ -115,7 +115,7 @@ const App = () => {
                     secureTextEntry={true}
                   />
                   <TouchableOpacity
-                    style={styles.googleButtonContainer}
+                    style={styles.emailButtonContainer}
                     onPress={signInWithEmailAndPassword}>
                     <Text style={styles.emailText}>
                       Sign in with email and password
@@ -125,10 +125,10 @@ const App = () => {
               ) : (
                 <>
                   <Text style={styles.orText}>Or</Text>
-                  <TouchableOpacity onPress={toggleEmailPasswordLogin}>
-                    <Text style={styles.emailOptionText}>
-                      Click here to use email and password
-                    </Text>
+                  <TouchableOpacity
+                    style={styles.emailButtonContainer}
+                    onPress={toggleEmailPasswordLogin}>
+                    <Text style={styles.emailText}>Use email and password</Text>
                   </TouchableOpacity>
                 </>
               )}
@@ -156,13 +156,13 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 0 : 40,
   },
   googleButtonContainer: {
-    minWidth: '80%',
+    width: 240,
     minHeight: 40,
     backgroundColor: Colors.white,
     textAlign: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: {
@@ -179,13 +179,13 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   fbButtonContainer: {
-    minWidth: '80%',
+    width: 240,
     minHeight: 40,
     backgroundColor: '#1877f2',
     textAlign: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     borderRadius: 8,
     shadowColor: '#000',
     shadowOffset: {
@@ -201,9 +201,52 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   appleButtonContainer: {
-    minWidth: '80%',
+    width: 240,
     minHeight: 40,
     backgroundColor: Colors.black,
+    textAlign: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 6.27,
+    elevation: 10,
+    overflow: 'visible',
+    padding: 8,
+    height: 40,
+    marginVertical: 10,
+  },
+  closeButtonContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.white,
+    textAlign: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.14,
+    shadowRadius: 6.27,
+    elevation: 10,
+    overflow: 'visible',
+    padding: 8,
+    marginVertical: 10,
+  },
+  emailButtonContainer: {
+    width: 240,
+    minHeight: 40,
+    backgroundColor: Colors.white,
     textAlign: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -247,11 +290,13 @@ const styles = StyleSheet.create({
   loginIcon: {
     width: 18,
     height: 18,
+    marginLeft: 20,
   },
   appleIcon: {
     width: 44,
     height: 44,
-    marginRight: 16,
+    marginLeft: 8,
+    marginRight: 12,
   },
   orText: {
     fontSize: 16,
